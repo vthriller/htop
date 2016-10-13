@@ -186,8 +186,8 @@ void Platform_setMemoryValues(Meter* this) {
    ProcessList* pl = (ProcessList*) this->pl;
 
    this->total = pl->totalMem;
-   this->values[0] = pl->usedMem;
-   this->values[1] = 0; // TODO
+   this->values[0] = pl->uncompMem;
+   this->values[1] = pl->compMem;
    this->values[2] = pl->buffersMem;
    this->values[3] = pl->cachedMem;
 }

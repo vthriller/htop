@@ -197,13 +197,14 @@ double Platform_setCPUValues(Meter* this, int cpu) {
 
 void Platform_setMemoryValues(Meter* this) {
    ProcessList* pl = (ProcessList*) this->pl;
-   long int usedMem = pl->usedMem;
+   long int uncompMem = pl->uncompMem;
+   long int compMem = pl->compMem;
    long int buffersMem = pl->buffersMem;
    long int cachedMem = pl->cachedMem;
-   usedMem -= buffersMem + cachedMem;
+   uncompMem -= buffersMem + cachedMem;
    this->total = pl->totalMem;
-   this->values[0] = usedMem;
-   this->values[1] = 0; // TODO
+   this->values[0] = uncompMem;
+   this->values[1] = compMem;
    this->values[2] = buffersMem;
    this->values[3] = cachedMem;
 }

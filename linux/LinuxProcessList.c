@@ -828,7 +828,8 @@ static inline void LinuxProcessList_scanMemoryInfo(ProcessList* this) {
       #undef tryRead
    }
 
-   this->usedMem = this->totalMem - this->freeMem;
+   this->uncompMem = this->totalMem - this->freeMem;
+   this->compMem = 0; // TODO
    this->cachedMem = this->cachedMem + sreclaimable - shmem;
    this->usedSwap = this->totalSwap - swapFree;
    fclose(file);

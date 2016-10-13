@@ -134,7 +134,8 @@ static inline void OpenBSDProcessList_scanMemoryInfo(ProcessList* pl) {
 
    pl->cachedMem = bcstats.numbufpages * PAGE_SIZE_KB;
    pl->freeMem = uvmexp.free * PAGE_SIZE_KB;
-   pl->usedMem = (uvmexp.npages - uvmexp.free - uvmexp.paging) * PAGE_SIZE_KB;
+   pl->uncompMem = (uvmexp.npages - uvmexp.free - uvmexp.paging) * PAGE_SIZE_KB;
+   pl->compMem = 0; // TODO
 
    /*
    const OpenBSDProcessList* opl = (OpenBSDProcessList*) pl;
@@ -142,9 +143,9 @@ static inline void OpenBSDProcessList_scanMemoryInfo(ProcessList* pl) {
    size_t len = sizeof(pl->totalMem);
    sysctl(MIB_hw_physmem, 2, &(pl->totalMem), &len, NULL, 0);
    pl->totalMem /= 1024;
-   sysctl(MIB_vm_stats_vm_v_wire_count, 4, &(pl->usedMem), &len, NULL, 0);
-   pl->usedMem *= PAGE_SIZE_KB;
-   pl->freeMem = pl->totalMem - pl->usedMem;
+   sysctl(MIB_vm_stats_vm_v_wire_count, 4, &(pl->uncompMem), &len, NULL, 0);
+   pl->uncompMem *= PAGE_SIZE_KB;
+   pl->freeMem = pl->totalMem - pl->uncompMem;
    sysctl(MIB_vm_stats_vm_v_cache_count, 4, &(pl->cachedMem), &len, NULL, 0);
    pl->cachedMem *= PAGE_SIZE_KB;
 

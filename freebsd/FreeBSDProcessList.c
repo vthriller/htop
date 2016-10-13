@@ -327,7 +327,8 @@ static inline void FreeBSDProcessList_scanMemoryInfo(ProcessList* pl) {
       // we could do custom arc breakdown?
    }
 
-   pl->usedMem = fpl->memActive + fpl->memWire;
+   pl->uncompMem = fpl->memActive + fpl->memWire;
+   pl->compMem = 0; // TODO
 
    //currently unused, same as with arc, custom meter perhaps
    //sysctl(MIB_vm_stats_vm_v_inactive_count, 4, &(fpl->memInactive), &len, NULL, 0);

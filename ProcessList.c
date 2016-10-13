@@ -59,7 +59,8 @@ typedef struct ProcessList_ {
    int kernelThreads;
 
    unsigned long long int totalMem;
-   unsigned long long int usedMem;
+   unsigned long long int uncompMem;
+   unsigned long long int compMem;
    unsigned long long int freeMem;
    unsigned long long int sharedMem;
    unsigned long long int buffersMem;
