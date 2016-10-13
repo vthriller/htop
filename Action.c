@@ -457,10 +457,11 @@ static Htop_Reaction actionHelp(State* st) {
    attrset(CRT_colors[DEFAULT_COLOR]);
    mvaddstr(4, 0, "Memory bar:    ");
    addattrstr(CRT_colors[BAR_BORDER], "[");
-   addattrstr(CRT_colors[MEMORY_USED], "used"); addstr("/");
+   addattrstr(CRT_colors[MEMORY_UNCOMPRESSED], "used"); addstr("/");
+   addattrstr(CRT_colors[MEMORY_COMPRESSED], "compressed"); addstr("/");
    addattrstr(CRT_colors[MEMORY_BUFFERS_TEXT], "buffers"); addstr("/");
    addattrstr(CRT_colors[MEMORY_CACHE], "cache");
-   addattrstr(CRT_colors[BAR_SHADOW], "                            used/total");
+   addattrstr(CRT_colors[BAR_SHADOW], "                 used/total");
    addattrstr(CRT_colors[BAR_BORDER], "]");
    attrset(CRT_colors[DEFAULT_COLOR]);
    mvaddstr(5, 0, "Swap bar:      ");

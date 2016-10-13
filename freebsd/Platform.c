@@ -187,8 +187,9 @@ void Platform_setMemoryValues(Meter* this) {
 
    this->total = pl->totalMem;
    this->values[0] = pl->usedMem;
-   this->values[1] = pl->buffersMem;
-   this->values[2] = pl->cachedMem;
+   this->values[1] = 0; // TODO
+   this->values[2] = pl->buffersMem;
+   this->values[3] = pl->cachedMem;
 }
 
 void Platform_setSwapValues(Meter* this) {
