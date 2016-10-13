@@ -28,7 +28,7 @@ static void MemoryMeter_updateValues(Meter* this, char* buffer, int size) {
    int written;
    Platform_setMemoryValues(this);
 
-   written = Meter_humanUnit(buffer, this->values[0], size);
+   written = Meter_humanUnit(buffer, this->values[0] + this->values[1], size);
    buffer += written;
    if ((size -= written) > 0) {
       *buffer++ = '/';
@@ -45,13 +45,14 @@ static void MemoryMeter_display(Object* cast, RichString* out) {
    Meter_humanUnit(buffer, this->total, 50);
    RichString_append(out, CRT_colors[METER_VALUE], buffer);
 
-   Meter_humanUnit(buffer, this->values[0], 50);
+   Meter_humanUnit(buffer, this->values[0] + this->values[1], 50);
    RichString_append(out, CRT_colors[METER_TEXT], " used:");
    RichString_append(out, CRT_colors[MEMORY_UNCOMPRESSED], buffer);
 
    Meter_humanUnit(buffer, this->values[1], 50);
-   RichString_append(out, CRT_colors[METER_TEXT], " compressed:");
+   RichString_append(out, CRT_colors[METER_TEXT], " (compressed:");
    RichString_append(out, CRT_colors[MEMORY_COMPRESSED], buffer);
+   RichString_append(out, CRT_colors[METER_TEXT], ")");
 
    Meter_humanUnit(buffer, this->values[2], 50);
    RichString_append(out, CRT_colors[METER_TEXT], " buffers:");
