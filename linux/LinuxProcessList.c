@@ -829,10 +829,39 @@ static inline void LinuxProcessList_scanMemoryInfo(ProcessList* this) {
    }
 
    this->uncompMem = this->totalMem - this->freeMem;
-   this->compMem = 0; // TODO
    this->cachedMem = this->cachedMem + sreclaimable - shmem;
    this->usedSwap = this->totalSwap - swapFree;
    fclose(file);
+
+   this->compMem = 0;
+
+   // XXX hard-coded paths?
+   DIR* dir = opendir("/sys/class/block");
+   if (!dir) return;
+
+   struct dirent* entry;
+   while ((entry = readdir(dir)) != NULL) {
+      char* name = entry->d_name;
+      if (strstr(name, "zram") != name) continue; // starts with "zram"
+      char* statname;
+      /*unsigned*/ long long int zcompr;
+
+      asprintf(&statname, "/sys/class/block/%s/compr_data_size", name);
+      file = fopen(statname, "r");
+      free(statname);
+      if (!file) continue;
+      if (fgets(buffer, 128, file) != NULL) {
+         zcompr = atoll(buffer) / 1024;
+         fclose(file);
+      } else {
+         fclose(file);
+         continue;
+      }
+
+      this->compMem += zcompr;
+      this->uncompMem -= zcompr;
+   }
+   closedir(dir);
 }
 
 static inline double LinuxProcessList_scanCPUTime(LinuxProcessList* this) {
