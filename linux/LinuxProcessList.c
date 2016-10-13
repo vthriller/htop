@@ -844,7 +844,7 @@ static inline void LinuxProcessList_scanMemoryInfo(ProcessList* this) {
       char* name = entry->d_name;
       if (strstr(name, "zram") != name) continue; // starts with "zram"
       char* statname;
-      /*unsigned*/ long long int zcompr;
+      /*unsigned*/ long long int zcompr, zorig, zsize;
 
       asprintf(&statname, "/sys/class/block/%s/compr_data_size", name);
       file = fopen(statname, "r");
@@ -858,8 +858,37 @@ static inline void LinuxProcessList_scanMemoryInfo(ProcessList* this) {
          continue;
       }
 
+      // TODO should probably distinguish devices used for swap from those used for other purposes
+
+      asprintf(&statname, "/sys/class/block/%s/orig_data_size", name);
+      file = fopen(statname, "r");
+      free(statname);
+      if (!file) continue;
+      if (fgets(buffer, 128, file) != NULL) {
+         zorig = atoll(buffer) / 1024;
+         fclose(file);
+      } else {
+         fclose(file);
+         continue;
+      }
+
+      asprintf(&statname, "/sys/class/block/%s/disksize", name);
+      file = fopen(statname, "r");
+      free(statname);
+      if (!file) continue;
+      if (fgets(buffer, 128, file) != NULL) {
+         zsize = atoll(buffer) / 1024;
+         fclose(file);
+      } else {
+         fclose(file);
+         continue;
+      }
+
       this->compMem += zcompr;
       this->uncompMem -= zcompr;
+      this->totalSwap -= zsize;
+      this->usedSwap -= zorig;
+      this->freeSwap -= zsize - zorig;
    }
    closedir(dir);
 }
