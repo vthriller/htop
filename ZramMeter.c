@@ -52,6 +52,14 @@ static void ZramMeter_display(Object* cast, RichString* out) {
    Meter_humanUnit(buffer, this->values[0], 50);
    RichString_append(out, CRT_colors[METER_TEXT], " compressed:");
    RichString_append(out, CRT_colors[ZRAM_COMPRESSED], buffer);
+
+   RichString_append(out, CRT_colors[METER_TEXT], " ratio: ");
+   if (this->values[0] + this->values[1]) {
+      snprintf(buffer, 50, "%.1fx", (double) (this->values[0] + this->values[1]) / this->values[0]);
+      RichString_append(out, CRT_colors[ZRAM_COMPRESSED], buffer);
+   } else {
+      RichString_append(out, CRT_colors[ZRAM_COMPRESSED], "-");
+   }
 }
 
 MeterClass ZramMeter_class = {
