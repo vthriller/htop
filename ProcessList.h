@@ -59,6 +59,11 @@ typedef struct ProcessList_ {
    unsigned long long int sharedMem;
    unsigned long long int buffersMem;
    unsigned long long int cachedMem;
+
+   unsigned long long int totalZram;
+   unsigned long long int uncompZram;
+   unsigned long long int compZram;
+
    unsigned long long int totalSwap;
    unsigned long long int usedSwap;
    unsigned long long int freeSwap;

@@ -41,6 +41,8 @@ double Platform_setCPUValues(Meter* this, int cpu);
 
 void Platform_setMemoryValues(Meter* this);
 
+void Platform_setZramValues(Meter* this);
+
 void Platform_setSwapValues(Meter* this);
 
 char* Platform_getProcessEnv(pid_t pid);

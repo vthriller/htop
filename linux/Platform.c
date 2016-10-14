@@ -15,6 +15,7 @@ in the source distribution for its full text.
 #include "Meter.h"
 #include "CPUMeter.h"
 #include "MemoryMeter.h"
+#include "ZramMeter.h"
 #include "SwapMeter.h"
 #include "TasksMeter.h"
 #include "LoadAverageMeter.h"
@@ -114,6 +115,7 @@ MeterClass* Platform_meterTypes[] = {
    &LoadAverageMeter_class,
    &LoadMeter_class,
    &MemoryMeter_class,
+   &ZramMeter_class,
    &SwapMeter_class,
    &TasksMeter_class,
    &UptimeMeter_class,
@@ -207,6 +209,16 @@ void Platform_setMemoryValues(Meter* this) {
    this->values[1] = compMem;
    this->values[2] = buffersMem;
    this->values[3] = cachedMem;
+}
+
+void Platform_setZramValues(Meter* this) {
+   ProcessList* pl = (ProcessList*) this->pl;
+   long int uncompZram = pl->uncompZram;
+   long int compZram = pl->compZram;
+   uncompZram -= compZram;
+   this->total = pl->totalZram;
+   this->values[0] = compZram;
+   this->values[1] = uncompZram;
 }
 
 void Platform_setSwapValues(Meter* this) {

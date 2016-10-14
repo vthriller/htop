@@ -834,6 +834,9 @@ static inline void LinuxProcessList_scanMemoryInfo(ProcessList* this) {
    fclose(file);
 
    this->compMem = 0;
+   this->totalZram = 0;
+   this->uncompZram = 0;
+   this->compZram = 0;
 
    // XXX hard-coded paths?
    DIR* dir = opendir("/sys/class/block");
@@ -889,6 +892,9 @@ static inline void LinuxProcessList_scanMemoryInfo(ProcessList* this) {
       this->totalSwap -= zsize;
       this->usedSwap -= zorig;
       this->freeSwap -= zsize - zorig;
+      this->totalZram += zsize;
+      this->uncompZram += zorig;
+      this->compZram += zcompr;
    }
    closedir(dir);
 }
