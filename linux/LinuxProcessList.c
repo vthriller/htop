@@ -849,7 +849,9 @@ static inline void LinuxProcessList_scanMemoryInfo(ProcessList* this) {
       char* statname;
       /*unsigned*/ long long int zcompr, zorig, zsize;
 
-      asprintf(&statname, "/sys/class/block/%s/compr_data_size", name);
+      // we use zcompr to represent amount of memory actually used for storing data,
+      // thus it makes sense to use "mem_used_total" instead of 'compr_data_size" to account for zram's own overhead
+      asprintf(&statname, "/sys/class/block/%s/mem_used_total", name);
       file = fopen(statname, "r");
       free(statname);
       if (!file) continue;
