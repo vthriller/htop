@@ -832,6 +832,21 @@ static inline void LinuxProcessList_scanMemoryInfo(ProcessList* this) {
    this->cachedMem = this->cachedMem + sreclaimable - shmem;
    this->usedSwap = this->totalSwap - swapFree;
    fclose(file);
+
+   unsigned long long arcsize = 0;
+   file = fopen("/proc/spl/kstat/zfs/arcstats", "r");
+   if (file == NULL)
+      return; // no big deal
+   while (fgets(buffer, 128, file)) {
+      // according to module/spl/spl-kstat.c:kstat_seq_show_named, entries in this file are formatted with "%-31s %-4d ", followed by the type-specific formatter
+      // since we're only interested in a single entry of a known type (KSTAT_DATA_UINT64), and column sizes are fixed, we can greatly simplify parsing process
+      if (String_startsWith(buffer, "size ")) {
+         sscanf(buffer+32+5, "%llu", &arcsize);
+         break;
+      }
+   }
+   this->cachedMem += arcsize / 1024; // to kB
+   fclose(file);
 }
 
 static inline double LinuxProcessList_scanCPUTime(LinuxProcessList* this) {
