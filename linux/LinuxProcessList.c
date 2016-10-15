@@ -815,6 +815,7 @@ static inline void LinuxProcessList_scanMemoryInfo(ProcessList* this) {
          case 'w':
             if (tryRead("SwapTotal:", &this->totalSwap)) {}
             else if (tryRead("SwapFree:", &swapFree)) {}
+            else if (tryRead("SwapCached:", &this->cachedSwap)) {}
             break;
          case 'h':
             if (tryRead("Shmem:", &shmem)) {}

@@ -21,7 +21,7 @@ in the source distribution for its full text.
 }*/
 
 int SwapMeter_attributes[] = {
-   SWAP
+   SWAP, SWAP_CACHE
 };
 
 static void SwapMeter_updateValues(Meter* this, char* buffer, int size) {
@@ -43,9 +43,14 @@ static void SwapMeter_display(Object* cast, RichString* out) {
    RichString_write(out, CRT_colors[METER_TEXT], ":");
    Meter_humanUnit(buffer, this->total, 50);
    RichString_append(out, CRT_colors[METER_VALUE], buffer);
+
    Meter_humanUnit(buffer, this->values[0], 50);
    RichString_append(out, CRT_colors[METER_TEXT], " used:");
    RichString_append(out, CRT_colors[METER_VALUE], buffer);
+
+   Meter_humanUnit(buffer, this->values[1], 50);
+   RichString_append(out, CRT_colors[METER_TEXT], " cached:");
+   RichString_append(out, CRT_colors[SWAP_CACHE], buffer);
 }
 
 MeterClass SwapMeter_class = {
@@ -56,7 +61,7 @@ MeterClass SwapMeter_class = {
    },
    .updateValues = SwapMeter_updateValues,
    .defaultMode = BAR_METERMODE,
-   .maxItems = 1,
+   .maxItems = 2,
    .total = 100.0,
    .attributes = SwapMeter_attributes,
    .name = "Swap",

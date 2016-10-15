@@ -285,6 +285,7 @@ void Platform_setSwapValues(Meter* this) {
 
    this->total = pl->totalSwap = total;
    this->values[0] = pl->usedSwap = used;
+   this->values[1] = 0;
 
    free(swdev);
 }

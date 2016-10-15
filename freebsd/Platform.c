@@ -195,6 +195,7 @@ void Platform_setSwapValues(Meter* this) {
    ProcessList* pl = (ProcessList*) this->pl;
    this->total = pl->totalSwap;
    this->values[0] = pl->usedSwap;
+   this->values[1] = 0;
 }
 
 void Platform_setTasksValues(Meter* this) {

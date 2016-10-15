@@ -210,7 +210,8 @@ void Platform_setMemoryValues(Meter* this) {
 void Platform_setSwapValues(Meter* this) {
    ProcessList* pl = (ProcessList*) this->pl;
    this->total = pl->totalSwap;
-   this->values[0] = pl->usedSwap;
+   this->values[0] = pl->usedSwap - pl->cachedSwap;
+   this->values[1] = pl->cachedSwap;
 }
 
 char* Platform_getProcessEnv(pid_t pid) {
